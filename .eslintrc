@@ -1,0 +1,17 @@
+{
+  "parserOptions": {
+    "ecmaVersion": 2019,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "extends": ["eslint-config-airbnb-base", "plugin:prettier/recommended"],
+  "rules": {
+    "no-console": ["error", { "allow": ["warn", "error"] }]
+  }
+}

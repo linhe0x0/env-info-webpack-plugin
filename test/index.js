@@ -1,0 +1,5 @@
+console.log()
+console.log('Testing for env-info-webpack-plugin. There is env info:')
+console.log()
+console.log('', BUILD_INFO)
+console.log()
