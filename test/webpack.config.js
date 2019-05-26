@@ -8,5 +8,9 @@ module.exports = {
     filename: 'dist.js',
   },
   target: 'node',
-  plugins: [new EnvInfoPlugin()],
+  plugins: [
+    new EnvInfoPlugin({
+      persistent: true,
+    }),
+  ],
 }

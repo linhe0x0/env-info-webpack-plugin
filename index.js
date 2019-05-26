@@ -48,11 +48,13 @@ class EnvInfoWebpackPlugin {
    * Resolve user options.
    * @param {Object} options options from user.
    * @param {String} options.name variable name for env info.
+   * @param {Boolean|String} options.persistent Persistent storage to local file.
    * @return {void}
    */
   constructor(options) {
     this.options = _.defaults(options, {
       name: 'BUILD_INFO',
+      persistent: false,
     })
   }
 
@@ -62,6 +64,8 @@ class EnvInfoWebpackPlugin {
    * @returns {void}
    */
   apply(compiler) {
+    let envInfo = null
+
     compiler.hooks.beforeCompile.tapPromise(pluginName, async () => {
       let version = ''
 
@@ -73,7 +77,7 @@ class EnvInfoWebpackPlugin {
         reportError(err, compiler)
       }
 
-      const envInfo = {
+      envInfo = {
         version,
         time: new Date().toISOString(),
       }
@@ -84,6 +88,26 @@ class EnvInfoWebpackPlugin {
 
       new DefinePlugin(env).apply(compiler)
     })
+
+    if (this.options.persistent) {
+      compiler.hooks.emit.tapAsync(pluginName, (compilation, callback) => {
+        const filename = _.isString(this.options.persistent)
+          ? this.options.persistent
+          : 'env-info.json'
+        const content = JSON.stringify(envInfo, null, 2)
+
+        compilation.assets[filename] = {
+          source: function() {
+            return content
+          },
+          size: function() {
+            return content.length
+          },
+        }
+
+        callback()
+      })
+    }
   }
 }
 
