@@ -2,8 +2,14 @@ const _ = require('lodash')
 const DefinePlugin = require('webpack/lib/DefinePlugin')
 const WebpackError = require('webpack/lib/WebpackError')
 const pkgUp = require('pkg-up')
+const { ConcatSource } = require('webpack-sources')
 
 const pluginName = 'EnvInfoPlugin'
+
+const globalThisName = {
+  web: 'window',
+  node: 'global',
+}
 
 /**
  * Resolve version from closest package.json file.
@@ -52,12 +58,14 @@ class EnvInfoWebpackPlugin {
    * Resolve user options.
    * @param {Object} options Options from user.
    * @param {String} options.name Variable name for env info.
+   * @param {Boolean} options.output Output env info to global variable.
    * @param {Boolean|String} options.persistent Persistent storage to local file.
    * @return {void}
    */
   constructor(options) {
     this.options = _.defaults(options, {
       name: 'BUILD_INFO',
+      output: false,
       persistent: false,
     })
   }
@@ -111,6 +119,42 @@ class EnvInfoWebpackPlugin {
         }
 
         callback()
+      })
+    }
+
+    const { target } = compiler.options
+
+    if (this.options.output) {
+      if (!globalThisName[target]) {
+        reportWarning(
+          new Error(
+            'Sorry, output option does not support the current target. But PRs are welcome.'
+          ),
+          compiler
+        )
+        return
+      }
+
+      compiler.hooks.compilation.tap(pluginName, compilation => {
+        compilation.hooks.optimizeChunkAssets.tap(pluginName, chunks => {
+          for (const chunk of chunks) {
+            if (!chunk.canBeInitial()) {
+              continue
+            }
+
+            for (const file of chunk.files) {
+              const content = `;${
+                globalThisName[target]
+              }.BUILD_INFO = ${JSON.stringify(envInfo)};`
+
+              compilation.assets[file] = new ConcatSource(
+                content,
+                '\n',
+                compilation.assets[file]
+              )
+            }
+          }
+        })
       })
     }
   }

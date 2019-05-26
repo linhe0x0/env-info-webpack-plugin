@@ -10,6 +10,7 @@ module.exports = {
   target: 'node',
   plugins: [
     new EnvInfoPlugin({
+      output: true,
       persistent: true,
     }),
   ],
