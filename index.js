@@ -137,23 +137,24 @@ class EnvInfoWebpackPlugin {
 
       compiler.hooks.compilation.tap(pluginName, compilation => {
         compilation.hooks.optimizeChunkAssets.tap(pluginName, chunks => {
-          for (const chunk of chunks) {
+          _.each(chunks, chunk => {
             if (!chunk.canBeInitial()) {
-              continue
+              return
             }
 
-            for (const file of chunk.files) {
+            _.each(chunk.files, file => {
               const content = `;${
                 globalThisName[target]
               }.BUILD_INFO = ${JSON.stringify(envInfo)};`
 
+              // eslint-disable-next-line
               compilation.assets[file] = new ConcatSource(
                 content,
                 '\n',
                 compilation.assets[file]
               )
-            }
-          }
+            })
+          })
         })
       })
     }
