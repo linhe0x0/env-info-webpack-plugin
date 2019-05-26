@@ -5,6 +5,10 @@ const pkgUp = require('pkg-up')
 
 const pluginName = 'EnvInfoPlugin'
 
+/**
+ * Resolve version from closest package.json file.
+ * @param {String} cwd Directory to start from.
+ */
 const getVersion = cwd => {
   return pkgUp(cwd).then(filepath => {
     if (!filepath) {
@@ -46,8 +50,8 @@ const reportWarning = (err, compiler) => {
 class EnvInfoWebpackPlugin {
   /**
    * Resolve user options.
-   * @param {Object} options options from user.
-   * @param {String} options.name variable name for env info.
+   * @param {Object} options Options from user.
+   * @param {String} options.name Variable name for env info.
    * @param {Boolean|String} options.persistent Persistent storage to local file.
    * @return {void}
    */
@@ -96,11 +100,12 @@ class EnvInfoWebpackPlugin {
           : 'env-info.json'
         const content = JSON.stringify(envInfo, null, 2)
 
+        // eslint-disable-next-line
         compilation.assets[filename] = {
-          source: function() {
+          source() {
             return content
           },
-          size: function() {
+          size() {
             return content.length
           },
         }
