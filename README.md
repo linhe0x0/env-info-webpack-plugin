@@ -12,7 +12,6 @@ Install with npm:
 
 ```shell
 npm i --save-dev html-webpack-plugin
-
 ```
 
 Install with yarn:
@@ -45,7 +44,7 @@ module.exports = {
 ##### index.js
 
 ```js
-console.log(BUILD_INFO) // BUILD_INFO will be replace with env info.
+console.log(BUILD_INFO) // BUILD_INFO will be replaced with env info.
 ```
 
 ## Options
