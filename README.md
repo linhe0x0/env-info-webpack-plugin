@@ -1,8 +1,8 @@
-# env-info-webpack-plugin
-
 [![npm](https://img.shields.io/npm/v/env-info-webpack-plugin.svg?style=flat-square)](https://www.npmjs.com/package/env-info-webpack-plugin)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/sqrthree/env-info-webpack-plugin/blob/master/LICENSE)
+
+# env-info-webpack-plugin
 
 Webpack plugin for generates building and env information.
 
