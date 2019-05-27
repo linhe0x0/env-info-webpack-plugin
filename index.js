@@ -4,6 +4,8 @@ const WebpackError = require('webpack/lib/WebpackError')
 const pkgUp = require('pkg-up')
 const { ConcatSource } = require('webpack-sources')
 
+const git = require('./utilities/git')
+
 const pluginName = 'EnvInfoPlugin'
 
 const globalThisName = {
@@ -34,6 +36,27 @@ const getVersion = cwd => {
       )
     }
   })
+}
+
+/**
+ * Get last updated commit hash from git history.
+ * @param {String} cwd Directory to resolve from.
+ */
+const getHash = cwd => {
+  return git
+    .isGitRepo(cwd)
+    .then(result => {
+      if (!result) {
+        return ''
+      }
+
+      return git.getLastUpdatedCommitHash(cwd)
+    })
+    .catch(err => {
+      return Promise.reject(
+        new Error(`Cannot resolve git hash from ${cwd}: ${err.message}`)
+      )
+    })
 }
 
 const report = (type, err, compiler) => {
@@ -80,10 +103,12 @@ class EnvInfoWebpackPlugin {
 
     compiler.hooks.beforeCompile.tapPromise(pluginName, async () => {
       let version = ''
+      let hash = ''
 
       try {
-        ;[version] = await Promise.all([
+        ;[version, hash] = await Promise.all([
           getVersion(compiler.context).catch(err => reportError(err, compiler)),
+          getHash(compiler.context).catch(err => reportWarning(err, compiler)),
         ])
       } catch (err) {
         reportError(err, compiler)
@@ -92,6 +117,7 @@ class EnvInfoWebpackPlugin {
       envInfo = {
         version,
         time: new Date().toISOString(),
+        hash,
       }
 
       const env = {
