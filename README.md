@@ -11,13 +11,13 @@ Webpack plugin for generates building and env information.
 Install with npm:
 
 ```shell
-npm i --save-dev html-webpack-plugin
+npm i --save-dev env-info-webpack-plugin
 ```
 
 Install with yarn:
 
 ```shell
-yarn add --dev html-webpack-plugin
+yarn add --dev env-info-webpack-plugin
 ```
 
 ### Prerequisites
