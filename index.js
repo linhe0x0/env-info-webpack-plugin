@@ -169,9 +169,9 @@ class EnvInfoWebpackPlugin {
             }
 
             _.each(chunk.files, file => {
-              const content = `;${
-                globalThisName[target]
-              }.BUILD_INFO = ${JSON.stringify(envInfo)};`
+              const content = `;${globalThisName[target]}.${
+                this.options.name
+              } = ${JSON.stringify(envInfo)};`
 
               // eslint-disable-next-line
               compilation.assets[file] = new ConcatSource(
