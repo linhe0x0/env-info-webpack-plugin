@@ -6,6 +6,8 @@
 
 Webpack plugin for generates building and env information.
 
+![image](https://user-images.githubusercontent.com/8622362/62819515-e006d000-bb88-11e9-88d8-e9e535a92e6f.png)
+
 ## Getting started
 
 Install with npm:
@@ -46,9 +48,16 @@ module.exports = {
 ```js
 console.log(BUILD_INFO) // BUILD_INFO will be replaced with env info.
 
+console.log(
+  `%c${BUILD_INFO.name}%cv${BUILD_INFO.version}`,
+  'background: #35495e; color: #fff; padding: 2px 4px; border-radius: 3px 0 0 3px;',
+  'background: #19be6b; color: #fff; padding: 2px 4px; border-radius: 0 3px 3px 0;'
+) // Output with colorful support.
+
 /*
 
 BUILD_INFO => {
+  name: 'Your Project Name',
   version: '0.1.0',
   time: '2019-05-27T15:49:46.162Z',
   hash: '035d7e36be302121871cf907e292269071a0c2f4',

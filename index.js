@@ -17,11 +17,11 @@ const globalThisName = {
  * Resolve version from closest package.json file.
  * @param {String} cwd Directory to start from.
  */
-const getVersion = cwd => {
+const getPkgInfo = cwd => {
   return pkgUp(cwd).then(filepath => {
     if (!filepath) {
       throw new Error(
-        `Cannot resolve [version] from package.json: No such file.`
+        `Cannot resolve package info from package.json: No such file.`
       )
     }
 
@@ -29,10 +29,10 @@ const getVersion = cwd => {
       // eslint-disable-next-line
       const pkg = require(filepath)
 
-      return pkg.version
+      return pkg
     } catch (err) {
       throw new Error(
-        `Cannot resolve [version] from ${filepath}: ${err.message}`
+        `Cannot resolve package info from ${filepath}: ${err.message}`
       )
     }
   })
@@ -102,12 +102,12 @@ class EnvInfoWebpackPlugin {
     let envInfo = null
 
     compiler.hooks.beforeCompile.tapPromise(pluginName, async () => {
-      let version = ''
+      let pkgInfo = {}
       let hash = ''
 
       try {
-        ;[version, hash] = await Promise.all([
-          getVersion(compiler.context).catch(err => reportError(err, compiler)),
+        ;[pkgInfo, hash] = await Promise.all([
+          getPkgInfo(compiler.context).catch(err => reportError(err, compiler)),
           getHash(compiler.context).catch(err => reportWarning(err, compiler)),
         ])
       } catch (err) {
@@ -115,7 +115,8 @@ class EnvInfoWebpackPlugin {
       }
 
       envInfo = {
-        version,
+        name: pkgInfo.name,
+        version: pkgInfo.version,
         time: new Date().toISOString(),
         hash,
       }
