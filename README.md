@@ -1,6 +1,6 @@
-[![npm](https://img.shields.io/npm/v/env-info-webpack-plugin.svg?style=flat-square)](https://www.npmjs.com/package/env-info-webpack-plugin)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/sqrthree/env-info-webpack-plugin/blob/master/LICENSE)
+[![npm](https://img.shields.io/npm/v/env-info-webpack-plugin.svg?style=?style=flat&logo=appveyor)](https://www.npmjs.com/package/env-info-webpack-plugin)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=?style=flat&logo=appveyor)](http://makeapullrequest.com)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=?style=flat&logo=appveyor)](https://github.com/sqrthree/env-info-webpack-plugin/blob/master/LICENSE)
 
 # env-info-webpack-plugin
 
@@ -64,6 +64,28 @@ BUILD_INFO => {
 }
 
 */
+```
+
+##### If you are using vue-cli
+
+```js
+// 1. Working with Webpack in vue.config.js
+const EnvInfoPlugin = require('env-info-webpack-plugin')
+
+module.exports = {
+  // ...Your own config.
+
+  configureWebpack: {
+    plugins: [new EnvInfoPlugin()],
+  },
+}
+
+// 2. Output info in main.js
+console.log(
+  `%c${BUILD_INFO.name}%cv${BUILD_INFO.version}`,
+  'background: #35495e; color: #fff; padding: 2px 4px; border-radius: 3px 0 0 3px;',
+  'background: #19be6b; color: #fff; padding: 2px 4px; border-radius: 0 3px 3px 0;'
+) // Output with colorful support.
 ```
 
 ## Options
