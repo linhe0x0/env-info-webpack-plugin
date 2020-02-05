@@ -98,13 +98,13 @@ Global constant name for env info, the default is `BUILD_INFO`.
 
 ### output
 
-Type: `string`
+Type: `boolean | string`
 
-Global constant name for env info, the default is _Options.name_.
+Global constant name for env info, the default is `false`, it will be _Options.name_ if the output is `true`.
 
 ### persistent
 
-Type: `boolean|string`
+Type: `boolean | string`
 
 Persistent storage to local file. If a string is given, it will be as name of output file.
 

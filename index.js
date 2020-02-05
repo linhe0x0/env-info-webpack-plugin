@@ -170,9 +170,12 @@ class EnvInfoWebpackPlugin {
             }
 
             _.each(chunk.files, file => {
-              const content = `;${globalThisName[target]}.${
-                this.options.name
-              } = ${JSON.stringify(envInfo)};`
+              const output = _.isString(this.options.output)
+                ? this.options.output
+                : this.options.name
+              const content = `;${
+                globalThisName[target]
+              }.${output} = ${JSON.stringify(envInfo)};`
 
               // eslint-disable-next-line
               compilation.assets[file] = new ConcatSource(
