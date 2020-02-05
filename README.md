@@ -100,7 +100,7 @@ Global constant name for env info, the default is `BUILD_INFO`.
 
 Type: `string`
 
-Global constant name for env info, the default is value of _Options.name_.
+Global constant name for env info, the default is _Options.name_.
 
 ### persistent
 
