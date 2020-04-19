@@ -7,13 +7,8 @@ exports.isGitRepo = function isGitRepo(cwd) {
       {
         cwd,
       },
-      (err, stdout, stderr) => {
+      (err, stdout) => {
         if (err) {
-          reject(err)
-          return
-        }
-
-        if (stderr) {
           resolve(false)
           return
         }
