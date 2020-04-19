@@ -17,8 +17,8 @@ const globalThisName = {
  * Resolve version from closest package.json file.
  * @param {String} cwd Directory to start from.
  */
-const getPkgInfo = cwd => {
-  return pkgUp(cwd).then(filepath => {
+const getPkgInfo = (cwd) => {
+  return pkgUp(cwd).then((filepath) => {
     if (!filepath) {
       throw new Error(
         `Cannot resolve package info from package.json: No such file.`
@@ -42,17 +42,17 @@ const getPkgInfo = cwd => {
  * Get last updated commit hash from git history.
  * @param {String} cwd Directory to resolve from.
  */
-const getHash = cwd => {
+const getHash = (cwd) => {
   return git
     .isGitRepo(cwd)
-    .then(result => {
+    .then((result) => {
       if (!result) {
         return ''
       }
 
       return git.getLastUpdatedCommitHash(cwd)
     })
-    .catch(err => {
+    .catch((err) => {
       return Promise.reject(
         new Error(`Cannot resolve git hash from ${cwd}: ${err.message}`)
       )
@@ -60,7 +60,7 @@ const getHash = cwd => {
 }
 
 const report = (type, err, compiler) => {
-  compiler.hooks.compilation.tap(pluginName, compilation => {
+  compiler.hooks.compilation.tap(pluginName, (compilation) => {
     const error = new WebpackError(`${pluginName} - ${err.message}`)
 
     error.name = 'EnvResolveError'
@@ -107,8 +107,12 @@ class EnvInfoWebpackPlugin {
 
       try {
         ;[pkgInfo, hash] = await Promise.all([
-          getPkgInfo(compiler.context).catch(err => reportError(err, compiler)),
-          getHash(compiler.context).catch(err => reportWarning(err, compiler)),
+          getPkgInfo(compiler.context).catch((err) =>
+            reportError(err, compiler)
+          ),
+          getHash(compiler.context).catch((err) =>
+            reportWarning(err, compiler)
+          ),
         ])
       } catch (err) {
         reportError(err, compiler)
@@ -162,14 +166,14 @@ class EnvInfoWebpackPlugin {
         return
       }
 
-      compiler.hooks.compilation.tap(pluginName, compilation => {
-        compilation.hooks.optimizeChunkAssets.tap(pluginName, chunks => {
-          _.each(chunks, chunk => {
+      compiler.hooks.compilation.tap(pluginName, (compilation) => {
+        compilation.hooks.optimizeChunkAssets.tap(pluginName, (chunks) => {
+          _.each(chunks, (chunk) => {
             if (!chunk.canBeInitial()) {
               return
             }
 
-            _.each(chunk.files, file => {
+            _.each(chunk.files, (file) => {
               const output = _.isString(this.options.output)
                 ? this.options.output
                 : this.options.name
