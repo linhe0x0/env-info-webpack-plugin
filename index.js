@@ -160,29 +160,33 @@ class EnvInfoWebpackPlugin {
       }
 
       compiler.hooks.compilation.tap(pluginName, (compilation) => {
-        compilation.hooks.optimizeChunkAssets.tap(pluginName, (chunks) => {
-          _.each(chunks, (chunk) => {
-            if (!chunk.canBeInitial()) {
-              return
-            }
+        compilation.hooks.processAssets.tap(
+          {
+            name: pluginName,
+            stage: compilation.PROCESS_ASSETS_STAGE_ADDITIONS,
+          },
+          () => {
+            const output = _.isString(this.options.output)
+              ? this.options.output
+              : this.options.name
+            const content = `;${
+              globalThisName[target]
+            }.${output} = ${JSON.stringify(envInfo)};`
 
-            _.each(chunk.files, (file) => {
-              const output = _.isString(this.options.output)
-                ? this.options.output
-                : this.options.name
-              const content = `;${
-                globalThisName[target]
-              }.${output} = ${JSON.stringify(envInfo)};`
+            compilation.chunks.forEach((chunk) => {
+              if (!chunk.canBeInitial()) {
+                return
+              }
 
-              // eslint-disable-next-line
-              compilation.assets[file] = new ConcatSource(
-                content,
-                '\n',
-                compilation.assets[file]
-              )
+              chunk.files.forEach((file) => {
+                compilation.updateAsset(
+                  file,
+                  (old) => new ConcatSource(content, '\n', old)
+                )
+              })
             })
-          })
-        })
+          }
+        )
       })
     }
   }
