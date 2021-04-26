@@ -1,7 +1,7 @@
 const childProcess = require('child_process')
 
 exports.isGitRepo = function isGitRepo(cwd) {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     childProcess.exec(
       'git rev-parse --is-inside-work-tree',
       {
