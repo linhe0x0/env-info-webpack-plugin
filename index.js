@@ -119,8 +119,8 @@ class EnvInfoWebpackPlugin {
       }
 
       envInfo = {
-        name: pkgInfo.name,
-        version: pkgInfo.version,
+        name: pkgInfo.name || '',
+        version: pkgInfo.version || '',
         time: new Date().toISOString(),
         hash,
       }
