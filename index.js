@@ -1,6 +1,5 @@
 const _ = require('lodash')
-const DefinePlugin = require('webpack/lib/DefinePlugin')
-const WebpackError = require('webpack/lib/WebpackError')
+const { DefinePlugin, WebpackError } = require('webpack')
 const pkgUp = require('pkg-up')
 const { ConcatSource } = require('webpack-sources')
 
@@ -99,6 +98,8 @@ class EnvInfoWebpackPlugin {
    * @returns {void}
    */
   apply(compiler) {
+    const { RawSource } = compiler.webpack.sources
+
     let envInfo = null
 
     compiler.hooks.beforeCompile.tapPromise(pluginName, async () => {
@@ -133,23 +134,15 @@ class EnvInfoWebpackPlugin {
     })
 
     if (this.options.persistent) {
-      compiler.hooks.emit.tapAsync(pluginName, (compilation, callback) => {
+      compiler.hooks.thisCompilation.tap(pluginName, (compilation) => {
         const filename = _.isString(this.options.persistent)
           ? this.options.persistent
           : 'env-info.json'
         const content = JSON.stringify(envInfo, null, 2)
 
-        // eslint-disable-next-line
-        compilation.assets[filename] = {
-          source() {
-            return content
-          },
-          size() {
-            return content.length
-          },
-        }
-
-        callback()
+        compilation.hooks.processAssets.tap(pluginName, () => {
+          compilation.emitAsset(filename, new RawSource(content))
+        })
       })
     }
 
