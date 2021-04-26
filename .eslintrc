@@ -10,7 +10,12 @@
     "browser": true,
     "node": true
   },
-  "extends": ["eslint-config-airbnb-base", "plugin:prettier/recommended"],
+  "plugins": ["jest"],
+  "extends": [
+    "eslint-config-airbnb-base",
+    "plugin:jest/recommended",
+    "plugin:prettier/recommended"
+  ],
   "rules": {
     "no-console": ["error", { "allow": ["warn", "error"] }]
   }

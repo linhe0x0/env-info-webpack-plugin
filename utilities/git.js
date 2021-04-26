@@ -26,13 +26,8 @@ exports.getLastUpdatedCommitHash = function getLastUpdatedCommitHash(cwd) {
       {
         cwd,
       },
-      (err, stdout, stderr) => {
+      (err, stdout) => {
         if (err) {
-          reject(err)
-          return
-        }
-
-        if (stderr) {
           reject(err)
           return
         }
