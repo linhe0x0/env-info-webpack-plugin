@@ -28,7 +28,7 @@ yarn add --dev env-info-webpack-plugin
 
 ## Usage
 
-##### webpack.config.js
+1. Enable plugin in your `webpack.config.js` file:
 
 ```js
 const EnvInfoPlugin = require('env-info-webpack-plugin')
@@ -43,10 +43,10 @@ module.exports = {
 }
 ```
 
-##### index.js
+2 Output info into console in your entry file, eg: `app.js`:
 
 ```js
-console.log(BUILD_INFO) // BUILD_INFO will be replaced with env info.
+console.log(BUILD_INFO) // BUILD_INFO will be replaced with env info when building with webpack.
 
 console.log(
   `%c${BUILD_INFO.name}%cv${BUILD_INFO.version}`,
