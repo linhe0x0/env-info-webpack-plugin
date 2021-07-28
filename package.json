@@ -28,7 +28,7 @@
     "lodash": "~4.17.21",
     "pkg-up": "^3.1.0",
     "webpack": "~5.45.1",
-    "webpack-sources": "~2.2.0"
+    "webpack-sources": "~3.0.1"
   },
   "devDependencies": {
     "@sqrtthree/prettier-config": "^2.0.1",
